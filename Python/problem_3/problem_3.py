@@ -12,6 +12,7 @@ def main(number):
     while True:
         current_prime = primes[-1]
 
+        # Reduce given number
         while not number % current_prime:
             number /= current_prime
 
@@ -19,12 +20,19 @@ def main(number):
         if number == 1:
             break
 
+        # Get next prime
         primes.append(next_prime(primes))
 
     return current_prime
 
 
 def next_prime(primes):
+    '''Finds primes by using a given list of primes
+    and increments a test number till it is not divisible
+    by any of the primes in the list
+
+    Note: may be able to optimize by only checking the primes under the sqrt
+    of the test value, benchmark later for it'''
     potential_prime = primes[-1] + 1
 
     while True:
