@@ -1,0 +1,9 @@
+[package]
+name = "problem_3"
+version = "0.1.0"
+authors = ["LovecraftianHorror <LovecraftianHorror@pm.me>"]
+
+[dependencies]
+
+[profile.release]
+debug = true
