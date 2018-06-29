@@ -4,7 +4,7 @@ def main(UPPERBOUND):
     sum = 0
 
     for i in range(1, UPPERBOUND):
-        if not i % 3 and not i % 5:
+        if not i % 3 or not i % 5:
             sum += i
 
     return sum
