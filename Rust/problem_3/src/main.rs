@@ -1,47 +1,24 @@
 fn main() {
-    let mut number = 600851475143;
+    let mut number: u64 = 600851475143;
+    let mut index = 3;
 
-    let mut primes = Vec::new();
-    primes.push(2);
+    // Factor out 2 seperately so I can index by 2 instead of 1
+    while number % 2 == 0 {
+        number /= 2;
+    }
 
     loop {
-        let current_prime = primes[primes.len() - 1];
-
-        while number % current_prime == 0 {
-            number /= current_prime;
+        while number % index== 0 {
+            number /= index;
         }
 
+        // All values are factored out, index is the largest prime factor
         if number == 1 {
             break;
         }
 
-        let next = next_prime(&primes);
-        primes.push(next);
-
+        index += 2;
     }
 
-    println!("The largest prime factor is {}", primes[primes.len() - 1]);
-    println!("{}", (4 as f32).sqrt());
-}
-
-
-fn next_prime(primes: &Vec<u64>) -> u64 {
-    let mut potential_prime = primes[primes.len() - 1];
-
-    loop {
-        let mut is_prime = true;
-
-        for prime in primes.iter() {
-            if potential_prime % prime == 0 {
-                is_prime = false;
-                break;
-            }
-        }
-
-        if is_prime {
-            return potential_prime;
-        }
-
-        potential_prime += 1;
-    }
+    println!("The largest prime factor is {}", index);
 }
