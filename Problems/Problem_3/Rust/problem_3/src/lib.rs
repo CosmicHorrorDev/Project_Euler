@@ -1,5 +1,5 @@
-pub fn largest_prime_factor() {
-    let mut number: u64 = 600851475143;
+pub fn largest_prime_factor(num: u64) -> u64 {
+    let mut number = num;
     let mut index = 3;
 
     // Factor out 2 seperately so I can index by 2 instead of 1
@@ -11,23 +11,23 @@ pub fn largest_prime_factor() {
         while number % index== 0 {
             number /= index;
         }
-
         // All values are factored out, index is the largest prime factor
         if number == 1 {
             break;
         }
-
         index += 2;
     }
 
-    println!("The largest prime factor is {}", index);
+    index
 }
 
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
+    fn test_largest_prime_factor() {
+        assert_eq!(largest_prime_factor(13195), 29);
     }
 }
