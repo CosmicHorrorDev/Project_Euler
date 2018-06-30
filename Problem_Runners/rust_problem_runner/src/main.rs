@@ -1,5 +1,6 @@
 extern crate time;
 extern crate problem_1;
+extern crate problem_2;
 
 use time::precise_time_ns;
 
@@ -7,7 +8,11 @@ use time::precise_time_ns;
 // * Parse command line args
 // * Do better benchmarking calculations
 fn main() {
-    let problem_functions = vec![run_problem_one];
+    let problem_functions = vec![
+        run_problem_one as fn() -> String,
+        run_problem_two as fn() -> String,
+    ];
+
     let mut problem_numbers = Vec::new();
     for i in 0..problem_functions.len() {
         problem_numbers.push(i);
@@ -53,4 +58,12 @@ fn run_problem_one() -> String {
     format!("The sum of multiples of {:?} below {} is {}",
             multiples, upper, sum)
 }
+
+
+fn run_problem_two() -> String {
+    let upper = 4000000;
+    let sum = problem_2::sum_even_fibonacci(upper);
+    format!("The sum of even Fibonacci numbers below {} is {}", upper, sum)
+}
+
 
