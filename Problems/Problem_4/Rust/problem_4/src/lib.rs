@@ -1,4 +1,4 @@
-fn main() {
+pub fn largest_palindrome_product() {
     let mut num1 = 999;
     let mut num2 = num1;
     let mut slide1 = num1;
@@ -53,4 +53,13 @@ where
     T: Eq,
 {
     v.iter().eq(v.iter().rev())
+}
+
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+        assert_eq!(2 + 2, 4);
+    }
 }

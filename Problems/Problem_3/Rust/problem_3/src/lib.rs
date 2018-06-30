@@ -1,4 +1,4 @@
-fn main() {
+pub fn largest_prime_factor() {
     let mut number: u64 = 600851475143;
     let mut index = 3;
 
@@ -21,4 +21,13 @@ fn main() {
     }
 
     println!("The largest prime factor is {}", index);
+}
+
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+        assert_eq!(2 + 2, 4);
+    }
 }

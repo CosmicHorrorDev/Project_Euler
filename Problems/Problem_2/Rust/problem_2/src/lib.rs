@@ -1,4 +1,5 @@
-fn main() {
+pub fn sum_even_fibonnaci() {
+
     let upperbound = 4000000;
 
     let mut sum = 2;
@@ -16,4 +17,13 @@ fn main() {
     }
 
     println!("Sum of even Fibonacci numbers below {} is {}", upperbound, sum);
+}
+
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+        assert_eq!(2 + 2, 4);
+    }
 }
