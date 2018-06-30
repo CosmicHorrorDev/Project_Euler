@@ -8,6 +8,18 @@ name = "problem_1"
 version = "0.1.0"
 
 [[package]]
+name = "problem_2"
+version = "0.1.0"
+
+[[package]]
+name = "problem_3"
+version = "0.1.0"
+
+[[package]]
+name = "problem_4"
+version = "0.1.0"
+
+[[package]]
 name = "redox_syscall"
 version = "0.1.40"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -17,6 +29,9 @@ name = "rust_problem_runner"
 version = "0.1.0"
 dependencies = [
  "problem_1 0.1.0",
+ "problem_2 0.1.0",
+ "problem_3 0.1.0",
+ "problem_4 0.1.0",
  "time 0.1.40 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

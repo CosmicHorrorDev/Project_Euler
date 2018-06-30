@@ -6,6 +6,6 @@ authors = ["LovecraftianHorror <LovecraftianHorror@pm.me>"]
 [dependencies]
 time = "*"
 problem_1 = { path = "../../Problems/Problem_1/Rust/problem_1" }
-problem_2 = { path = "../../Problems/Problem_1/Rust/problem_1" }
-problem_3 = { path = "../../Problems/Problem_1/Rust/problem_3" }
-problem_4 = { path = "../../Problems/Problem_1/Rust/problem_4" }
+problem_2 = { path = "../../Problems/Problem_2/Rust/problem_2" }
+problem_3 = { path = "../../Problems/Problem_3/Rust/problem_3" }
+problem_4 = { path = "../../Problems/Problem_4/Rust/problem_4" }
