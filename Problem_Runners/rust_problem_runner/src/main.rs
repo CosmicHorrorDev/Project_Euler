@@ -5,25 +5,77 @@ extern crate problem_2;
 extern crate problem_3;
 
 
+use std::env::args;
+use std::process::exit;
 use time::precise_time_ns;
 
 // TODO:
-// * Parse command line args
 // * Do better benchmarking calculations
 fn main() {
     let problem_functions = vec![
         run_problem_one as fn() -> String,
-        run_problem_one_try_hard as fn() -> String,
         run_problem_two as fn() -> String,
         run_problem_three as fn() -> String,
     ];
 
-    let mut problem_numbers = Vec::new();
-    for i in 0..problem_functions.len() {
-        problem_numbers.push(i);
+    let mut usage = String::new();
+    usage += "USAGE:\n";
+    usage += "\trust_problem_runner [--help | --run PROBLEMS | --bench PROBLEMS]\n\n";
+    usage += "OPTIONS:\n";
+    usage += "\t-h --help            Shows this screen\n";
+    usage += "\t-r --run PROBLEMS    Runs the specified problem's programs given in a comma separated list\n";
+    usage += "\t-b --bench PROBLEMS  Benchmarks the specified problem's programs given in a comma separated list\n\n";
+    usage += "EXAMPLES:\n";
+    usage += "\trust_problem_runner -r 1\n";
+    usage += "\t\tRuns the first problem's solution\n";
+    usage += "\tserial_test -b 3,1,2\n";
+    usage += "\t\tBenchmarks problems 3, 1, then 2\n";
+
+    let mut parsed = Vec::new();
+    for arg in args().skip(1) {
+        parsed.push(arg);
     }
 
-    bench(problem_functions, &problem_numbers);
+    // The below code is all to verify correct usage of cli args
+    // 1 arg if -h flag, 2 for -r or -b to give problem numbers
+    if parsed.len() < 1 || parsed.len() > 2 {
+        panic!(usage);
+    }
+
+    let bench_probs = parsed[0] == "-b" || parsed[0] == "--bench";
+    let run_probs = parsed[0] == "-r" || parsed[0] == "--run";
+    let help = parsed[0] == "-h" || parsed[0] == "--help";
+
+    // Incorrect usage if no flags, or run and bench flags
+    if !(bench_probs || run_probs || help) || (bench_probs && run_probs) {
+        panic!(usage)
+    }
+
+    if help {
+        println!("{}", usage);
+        exit(0);
+    }
+
+    // Parse problem numbers to run
+    let mut nums = Vec::new();
+    for num in parsed[1].split(",") {
+        nums.push(match num.parse() {
+            Err(_) => {
+                //TODO, don't leave this in
+                panic!("I'm panicing!!!!");
+            }
+            Ok(n) => {
+                assert!(n > 0 && n <= problem_functions.len());
+                n
+            }
+        });
+    }
+
+    if bench_probs {
+        bench(problem_functions, &nums);
+    } else {
+        run(problem_functions, &nums);
+    }
 }
 
 
@@ -31,7 +83,7 @@ fn run<F>(problems: Vec<F>, numbers: &[usize])
 where F: Fn() -> String
 {
     for number in numbers.iter() {
-        println!("{}", problems[*number]());
+        println!("{}", problems[*number - 1]());
     }
 }
 
@@ -44,14 +96,14 @@ where F: Fn() -> String
         let mut index = 100;
         while index > 0 {
             let start = precise_time_ns();
-            problems[*number]();
+            problems[*number - 1]();
             times.push(precise_time_ns() - start);
 
             index -= 1;
         }
 
         let times_sum: u64 = times.iter().sum();
-        println!("Average time: {}", (times_sum as f32) / (times.len() as f32));
+        println!("Average time [ns] {}", (times_sum as f32) / (times.len() as f32));
     }
 }
 
