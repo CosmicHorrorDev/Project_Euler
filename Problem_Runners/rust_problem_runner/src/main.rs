@@ -81,8 +81,11 @@ fn run<F>(problems: Vec<F>, numbers: &[usize])
 where F: Fn() -> String
 {
     for number in numbers.iter() {
+        println!("===================================================");
+        println!("[Running Problem {}]", *number);
         println!("{}", problems[*number - 1]());
     }
+    println!("===================================================");
 }
 
 
@@ -105,7 +108,7 @@ where F: Fn() -> String
         let (mean, deviation) = standard_deviation(&times);
         println!("===================================================");
         println!("[Benchmarking Problem {}]", *number);
-        println!("mean ± σ [ns]: {} ± {}", mean, deviation);
+        println!("mean ± σ [ns]: {:.2} ± {:.2}", mean, deviation);
     }
     println!("===================================================");
 }
