@@ -10,9 +10,9 @@ use time::precise_time_ns;
 
 fn main() {
     let problem_functions = vec![
-        run_problem_one as fn() -> String,
-        run_problem_two as fn() -> String,
-        run_problem_three as fn() -> String,
+        problem_one as fn() -> String,
+        problem_two as fn() -> String,
+        problem_three as fn() -> String,
     ];
 
     let mut usage = String::new();
@@ -25,7 +25,7 @@ fn main() {
     usage += "EXAMPLES:\n";
     usage += "\trust_problem_runner -r 1\n";
     usage += "\t\tRuns the first problem's solution\n";
-    usage += "\tserial_test -b 3,1,2\n";
+    usage += "\trust_problem_runner -b 3,1,2\n";
     usage += "\t\tBenchmarks problems 3, 1, then 2\n";
 
     let mut parsed = Vec::new();
@@ -127,21 +127,21 @@ fn standard_deviation(samples: &Vec<u64>) -> (f64, f64) {
 }
 
 
-fn run_problem_one() -> String {
+fn problem_one() -> String {
     let upper = 1000;
     let sum = problem_1::sum_multiples_of_3_and_5(upper);
     format!("The sum of multiples of 3 and 5 below {} is {}", upper, sum)
 }
 
 
-fn run_problem_two() -> String {
+fn problem_two() -> String {
     let upper = 4000000;
     let sum = problem_2::sum_even_fibonacci(upper);
     format!("The sum of even Fibonacci numbers below {} is {}", upper, sum)
 }
 
 
-fn run_problem_three() -> String {
+fn problem_three() -> String {
     let num = 600851475143;
     let prime = problem_3::largest_prime_factor(num);
     format!("The largest prime factor is {}", prime)
