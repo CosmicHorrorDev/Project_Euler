@@ -4,15 +4,15 @@ These are my solutions to the [Project Euler](projecteuler.net) challenges. I am
 
 ### Benchmarks
 
-All benchmarks are done using hyperfine, the Rust solutions so far are too fast for the benchmark to be accurate, but it gives a general idea. These benchmarks are done on my personal computer so results will vary.
+The benchmarks are done using the different Problem Runners in the Problem\_Runners directory. These were done on my laptop and of couse the results will vary. Benchmarking consists of timing the problems for 5000 rounds, then determining the mean and standard devition. This is done in the program itself to try and minimize the overhead and give a good representation.
 
-| Problem | Language | Mean [ms] | Min...Max [ms] |
-|:---|:---|---:|---:|
-| Problem 1 | Python | 18.8 ± 1.1 | 17.6…23.1 |
-| | Rust | 1.7 ± 1.0 | 0.1…4.8 |
-| Problem 2 | Python | 18.9 ± 1.3 | 17.5…23.8 |
-| | Rust | 1.6 ± 1.0 | 0.1…4.8 |
-| Problem 3 | Python | 19.3 ± 1.4 | 18.1…27.4 |
-| | Rust | 1.7 ± 1.0 | 0.2…4.6 |
-| Problem 4 | Python |
-| | Rust | 2.0 ± 1.0 | 0.5…5.6 |
+| Problem | Language | Mean ± σ [ns] |
+|:---|:---|---:|
+| Problem 1 | Python |  |
+| | Rust |  |
+| Problem 2 | Python |  |
+| | Rust |  |
+| Problem 3 | Python |  |
+| | Rust |  |
+| Problem 4 | Python |  |
+| | Rust |  |

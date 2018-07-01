@@ -4,13 +4,11 @@ extern crate problem_1_try_hard;
 extern crate problem_2;
 extern crate problem_3;
 
-
 use std::env::args;
 use std::process::exit;
 use time::precise_time_ns;
 
-// TODO:
-// * Do better benchmarking calculations
+
 fn main() {
     let problem_functions = vec![
         run_problem_one as fn() -> String,
@@ -61,8 +59,8 @@ fn main() {
     for num in parsed[1].split(",") {
         nums.push(match num.parse() {
             Err(_) => {
-                //TODO, don't leave this in
-                panic!("I'm panicing!!!!");
+                panic!(format!("Error parsing arg, expected int, saw {}",
+                               num));
             }
             Ok(n) => {
                 assert!(n > 0 && n <= problem_functions.len());
@@ -93,7 +91,9 @@ where F: Fn() -> String
 {
     for number in numbers.iter() {
         let mut times = Vec::new();
-        let mut index = 100;
+        // Eventually dig in to automatically determining sample size but for
+        // now this will do
+        let mut index = 10000;
         while index > 0 {
             let start = precise_time_ns();
             problems[*number - 1]();
@@ -102,9 +102,25 @@ where F: Fn() -> String
             index -= 1;
         }
 
-        let times_sum: u64 = times.iter().sum();
-        println!("Average time [ns] {}", (times_sum as f32) / (times.len() as f32));
+        let (mean, deviation) = standard_deviation(&times);
+        println!("===================================================");
+        println!("[Benchmarking Problem {}]", *number);
+        println!("mean ± σ [ns]: {} ± {}", mean, deviation);
     }
+    println!("===================================================");
+}
+
+
+fn standard_deviation(samples: &Vec<u64>) -> (f64, f64) {
+    let sum: u64 = samples.iter().sum();
+    let mean = (sum as f64) / (samples.len() as f64);
+    let mut sum_diff_sqrd = 0.0;
+    for sample in samples {
+        sum_diff_sqrd += ((*sample as f64) - mean).powi(2);
+    }
+    let deviation = (sum_diff_sqrd / (samples.len() as f64)).sqrt();
+
+    (mean, deviation)
 }
 
 
