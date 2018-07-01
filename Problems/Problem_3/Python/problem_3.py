@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-def main(number):
+def largest_prime_factor(number):
     assert(number > 1)
     index = 3
 

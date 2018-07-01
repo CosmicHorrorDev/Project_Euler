@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-def main(UPPERBOUND):
+def sum_of_multiples_of_3_and_5(UPPERBOUND):
     UPPERBOUND -= 1
     sum_mult = 5 * sum_range(UPPERBOUND // 5)
     sum_mult += 3 * sum_range(UPPERBOUND // 3)

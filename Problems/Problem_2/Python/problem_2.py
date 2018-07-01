@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def main(upperbound):
+def sum_even_fibonacci(upperbound):
     result = 2
 
     previous = 1
