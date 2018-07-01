@@ -2,6 +2,7 @@ extern crate time;
 extern crate problem_1;
 extern crate problem_2;
 extern crate problem_3;
+extern crate problem_4;
 
 use std::env::args;
 use std::process::exit;
@@ -13,6 +14,7 @@ fn main() {
         problem_one as fn() -> String,
         problem_two as fn() -> String,
         problem_three as fn() -> String,
+        problem_four as fn() -> String,
     ];
 
     let mut usage = String::new();
@@ -145,5 +147,14 @@ fn problem_three() -> String {
     let num = 600851475143;
     let prime = problem_3::largest_prime_factor(num);
     format!("The largest prime factor is {}", prime)
+}
+
+
+fn problem_four() -> String {
+    let upper = 1000;
+    let (num1, num2) = problem_4::largest_palindrome_product(upper);
+    let product = num1 * num2;
+    format!(" The largest palindrome product is {} = {} * {}",
+            product, num1, num2)
 }
 

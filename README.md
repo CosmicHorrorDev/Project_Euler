@@ -14,5 +14,5 @@ The benchmarks are done using the different Problem Runners in the Problem\_Runn
 | | Rust | 0.28 ± 0.05 |
 | Problem 3 | Python |  555.22 ± 8.52|
 | | Rust | 32.46 ± 1.90 |
-| Problem 4 | Python |  |
-| | Rust |  |
+| Problem 4 | Python | 1597.57 ± 23.13 |
+| | Rust | 174.97 ± 5.52 |

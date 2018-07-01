@@ -24,14 +24,16 @@ from docopt import docopt
 sys.path.append('../Problems/Problem_1/Python')
 sys.path.append('../Problems/Problem_2/Python')
 sys.path.append('../Problems/Problem_3/Python')
+sys.path.append('../Problems/Problem_4/Python')
 
 import problem_1
 import problem_2
 import problem_3
+import problem_4
 
 
 def main():
-    HIGHEST_PROBLEM = 3
+    HIGHEST_PROBLEM = 4
     arguments = docopt(__doc__)
     if arguments['--bench']:
         numbers = arguments['--bench']
@@ -42,9 +44,10 @@ def main():
     for n in numbers.split(','):
         # TODO: need a try catch here for parsing failure
         n = int(n)
-        if n < 1 or n > 3:
+        if n < 1 or n > HIGHEST_PROBLEM:
             print((f'Error parsing arg: number should be from 1 to'
                    f' {HIGHEST_PROBLEM}, saw {n}'))
+            sys.exit(1)
         parsed_numbers.append(n)
 
     if arguments['--bench']:
@@ -65,7 +68,7 @@ def run(numbers):
             result = problem_four()
 
         print('===================================================')
-        print(f'[Benchmarking Problem {number}]')
+        print(f'[Running Problem {number}]')
         print(result)
     print('===================================================')
 
@@ -122,6 +125,13 @@ def problem_three():
     VAL = 600851475143
     factor = problem_3.largest_prime_factor(VAL)
     return f'The largest prime factor of {VAL} is {factor}'
+
+
+def problem_four():
+    UPPER = 1000
+    num1, num2 = problem_4.largest_palindrome_product(UPPER)
+    product = num1 * num2
+    return f'The largest palindrome product is {product} = {num1} * {num2}'
 
 
 if __name__ == '__main__':
