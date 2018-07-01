@@ -1,14 +1,24 @@
 #!/usr/bin/env python3
 
+
 def main(UPPERBOUND):
-    sum = 0
+    UPPERBOUND -= 1
+    sum_mult = 5 * sum_range(UPPERBOUND // 5)
+    sum_mult += 3 * sum_range(UPPERBOUND // 3)
+    sum_mult -= (5 * 3) * sum_range(UPPERBOUND // (5 * 3))
 
-    for i in range(1, UPPERBOUND):
-        if not i % 3 or not i % 5:
-            sum += i
+    return sum_mult
 
-    return sum
+
+def sum_range(upper):
+    sum_vals = ((upper + 1) // 2) * upper
+
+    if not upper % 2:
+        sum_vals += upper // 2
+
+    return sum_vals
+
 
 if __name__ == '__main__':
-    print(main(1000))
+    main()
 

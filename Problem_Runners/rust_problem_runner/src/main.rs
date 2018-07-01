@@ -1,6 +1,5 @@
 extern crate time;
 extern crate problem_1;
-extern crate problem_1_try_hard;
 extern crate problem_2;
 extern crate problem_3;
 
@@ -130,16 +129,7 @@ fn standard_deviation(samples: &Vec<u64>) -> (f64, f64) {
 
 fn run_problem_one() -> String {
     let upper = 1000;
-    let multiples = &[3, 5];
-    let sum = problem_1::sum_multiples(upper, multiples);
-    format!("The sum of multiples of {:?} below {} is {}",
-            multiples, upper, sum)
-}
-
-
-fn run_problem_one_try_hard() -> String {
-    let upper = 1000;
-    let sum = problem_1_try_hard::sum_multiples_of_3_and_5(upper);
+    let sum = problem_1::sum_multiples_of_3_and_5(upper);
     format!("The sum of multiples of 3 and 5 below {} is {}", upper, sum)
 }
 

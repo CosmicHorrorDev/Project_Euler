@@ -1,21 +1,31 @@
-pub fn sum_multiples(upper: usize, multiples: &[usize]) -> usize {
-    let mut sum = 0;
+pub fn sum_multiples_of_3_and_5(upper: u64) -> u64 {
+    let adj_upper = upper - 1;
+    let mut sum = 5 * sum_range(adj_upper / 5);
+    sum += 3 * sum_range(adj_upper / 3);
+    sum -= 15 * sum_range(adj_upper / 15);
 
-    for i in 1..upper {
-        if multiples.iter().any(|&m| i % m == 0) {
-            sum += i;
-        }
+    sum
+}
+
+
+fn sum_range(upper: u64) -> u64 {
+    let mut sum = ((upper + 1) / 2) * upper;
+
+    if upper % 2 == 0 {
+        sum += upper / 2;
     }
 
     sum
 }
 
+
 #[cfg(test)]
 mod tests {
-    use super::sum_multiples;
+    use super::*;
 
     #[test]
-    fn test_sum_multiples() {
-        assert_eq!(sum_multiples(10, &[3, 5]), 23);
+    fn test_sum_multiples_of_3_and_5() {
+        assert_eq!(sum_multiples_of_3_and_5(10), 23);
     }
 }
+
