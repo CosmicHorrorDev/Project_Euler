@@ -90,7 +90,7 @@ def bench(numbers):
         mean, deviation = standard_deviation(times)
         print('===================================================')
         print(f'[Benchmarking Problem {number}]')
-        print(f'mean ± σ [µs]: {mean:.3f} ± {deviation:.3f}')
+        print(f'mean ± σ [µs]: {mean:.2f} ± {deviation:.2f}')
     print('===================================================')
 
 

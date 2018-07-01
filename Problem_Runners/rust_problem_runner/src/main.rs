@@ -107,7 +107,7 @@ where F: Fn() -> String
         let (mean, deviation) = standard_deviation(&times);
         println!("===================================================");
         println!("[Benchmarking Problem {}]", *number);
-        println!("mean ± σ [µs]: {:.3} ± {:.3}",
+        println!("mean ± σ [µs]: {:.2} ± {:.2}",
                  mean / 1000.0, deviation / 1000.0);
     }
     println!("===================================================");
