@@ -29,10 +29,7 @@ EXAMPLES:
 \trust_problem_runner -b 3,1,2
 \t\tBenchmarks problems 3, 1, then 2\n";
 
-    let mut parsed = Vec::new();
-    for arg in args().skip(1) {
-        parsed.push(arg);
-    }
+    let parsed: Vec<String> = args().skip(1).collect();
 
     // The below code is all to verify correct usage of cli args
     // 1 arg if -h flag, 2 for -r or -b to give problem numbers
