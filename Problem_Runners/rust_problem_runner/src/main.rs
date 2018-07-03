@@ -17,18 +17,17 @@ fn main() {
         problem_four as fn() -> String,
     ];
 
-    let mut usage = String::new();
-    usage += "USAGE:\n";
-    usage += "\trust_problem_runner [--help | --run PROBLEMS | --bench PROBLEMS]\n\n";
-    usage += "OPTIONS:\n";
-    usage += "\t-h --help            Shows this screen\n";
-    usage += "\t-r --run PROBLEMS    Runs the specified problem's programs given in a comma separated list\n";
-    usage += "\t-b --bench PROBLEMS  Benchmarks the specified problem's programs given in a comma separated list\n\n";
-    usage += "EXAMPLES:\n";
-    usage += "\trust_problem_runner -r 1\n";
-    usage += "\t\tRuns the first problem's solution\n";
-    usage += "\trust_problem_runner -b 3,1,2\n";
-    usage += "\t\tBenchmarks problems 3, 1, then 2\n";
+    let usage = "USAGE:
+\trust_problem_runner [--help | --run PROBLEMS | --bench PROBLEMS]\n
+OPTIONS:
+\t-h --help            Shows this screen
+\t-r --run PROBLEMS    Runs the specified problem's programs given in a comma separated list
+\t-b --bench PROBLEMS  Benchmarks the specified problem's programs given in a comma separated list\n
+EXAMPLES:
+\trust_problem_runner -r 1
+\t\tRuns the first problem's solution
+\trust_problem_runner -b 3,1,2
+\t\tBenchmarks problems 3, 1, then 2\n";
 
     let mut parsed = Vec::new();
     for arg in args().skip(1) {
@@ -38,7 +37,8 @@ fn main() {
     // The below code is all to verify correct usage of cli args
     // 1 arg if -h flag, 2 for -r or -b to give problem numbers
     if parsed.len() < 1 || parsed.len() > 2 {
-        panic!(usage);
+        println!("{}", usage);
+        exit(1);
     }
 
     let bench_probs = parsed[0] == "-b" || parsed[0] == "--bench";
@@ -47,7 +47,8 @@ fn main() {
 
     // Incorrect usage if no flags, or run and bench flags
     if !(bench_probs || run_probs || help) || (bench_probs && run_probs) {
-        panic!(usage)
+        println!("{}", usage);
+        exit(1);
     }
 
     if help {
@@ -55,19 +56,30 @@ fn main() {
         exit(0);
     }
 
+    if (bench_probs || run_probs) && parsed.len() != 2 {
+        println!("Expected 1 argument after --bench or --run, saw {}",
+                 parsed.len() - 1);
+        exit(1);
+    }
+
+    // move this to a function
     // Parse problem numbers to run
     let mut nums = Vec::new();
-    for num in parsed[1].split(",") {
-        nums.push(match num.parse() {
-            Err(_) => {
-                panic!(format!("Error parsing arg, expected int, saw {}",
-                               num));
+    if parsed[1] == "all" {
+        nums = (1..=problem_functions.len()).collect();
+    } else {
+        for section in parsed[1].split(',') {
+            if section.contains(':') {
+                let elements: Vec<&str> = section.split(':').collect();
+                assert_eq!(elements.len(), 2);
+
+                let start = elements[0].parse().expect("Error: expected int");
+                let end = elements[1].parse().expect("Error: expected int");
+                nums.append(&mut (start..=end).collect());
+            } else {
+                nums.push(section.parse().expect("Error: expected int"));
             }
-            Ok(n) => {
-                assert!(n > 0 && n <= problem_functions.len());
-                n
-            }
-        });
+        }
     }
 
     if bench_probs {
@@ -94,6 +106,9 @@ fn bench<F>(problems: Vec<F>, numbers: &[usize])
 where F: Fn() -> String
 {
     for number in numbers.iter() {
+        println!("===================================================");
+        println!("[Benchmarking Problem {}]", *number);
+
         let mut times = Vec::new();
         // Eventually dig in to automatically determining sample size but for
         // now this will do
@@ -105,10 +120,7 @@ where F: Fn() -> String
 
             index -= 1;
         }
-
         let (mean, deviation) = standard_deviation(&times);
-        println!("===================================================");
-        println!("[Benchmarking Problem {}]", *number);
         println!("mean ± σ [µs]: {:.2} ± {:.2}",
                  mean / 1000.0, deviation / 1000.0);
     }
@@ -154,7 +166,7 @@ fn problem_four() -> String {
     let upper = 1000;
     let (num1, num2) = problem_4::largest_palindrome_product(upper);
     let product = num1 * num2;
-    format!(" The largest palindrome product is {} = {} * {}",
+    format!("The largest palindrome product is {} = {} * {}",
             product, num1, num2)
 }
 
