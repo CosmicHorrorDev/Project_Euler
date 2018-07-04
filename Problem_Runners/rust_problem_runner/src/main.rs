@@ -18,16 +18,23 @@ fn main() {
     ];
 
     let usage = "USAGE:
-\trust_problem_runner [--help | --run PROBLEMS | --bench PROBLEMS]\n
+    rust_problem_runner [--help | --run PROBLEMS | --bench PROBLEMS]\n
 OPTIONS:
-\t-h --help            Shows this screen
-\t-r --run PROBLEMS    Runs the specified problem's programs given in a comma separated list
-\t-b --bench PROBLEMS  Benchmarks the specified problem's programs given in a comma separated list\n
+    -h --help            Shows this screen
+    -r --run PROBLEMS    Runs the specified problem's solution
+    -b --bench PROBLEMS  Benchmarks the specified problem's solution\n
+ARGUMENTS:
+    PROBLEMS  Problems can be specified with 3 forms where # is a number
+                  all: all is special and specifies all solutions
+                  #,#: will run the first number, then the second and can be
+                       chained like #,#,#,#
+                  #:#: will run all the soltuions from the first number to the
+                       second number, can be chained with commas like #:#,#:#\n
 EXAMPLES:
-\trust_problem_runner -r 1
-\t\tRuns the first problem's solution
-\trust_problem_runner -b 3,1,2
-\t\tBenchmarks problems 3, 1, then 2\n";
+    rust_problem_runner -r 1
+        Runs the first problem's solution
+    rust_problem_runner -b 3,1,2
+        Benchmarks problems 3, 1, then 2\n";
 
     let parsed: Vec<String> = args().skip(1).collect();
 
@@ -43,7 +50,7 @@ EXAMPLES:
     let help = parsed[0] == "-h" || parsed[0] == "--help";
 
     // Incorrect usage if no flags, or run and bench flags
-    if !(bench_probs || run_probs || help) || (bench_probs && run_probs) {
+    if !(bench_probs || run_probs || help) {
         println!("{}", usage);
         exit(1);
     }
@@ -65,16 +72,30 @@ EXAMPLES:
     if parsed[1] == "all" {
         nums = (1..=problem_functions.len()).collect();
     } else {
+        //let mut error_index = 0;
         for section in parsed[1].split(',') {
             if section.contains(':') {
                 let elements: Vec<&str> = section.split(':').collect();
-                assert_eq!(elements.len(), 2);
+                if elements.len() != 2 {
+                    println!("Error: ranges can not be chained and must be in \
+                             the form of number:number like 1:3");
+                    exit(1);
+                }
 
-                let start = elements[0].parse().expect("Error: expected int");
-                let end = elements[1].parse().expect("Error: expected int");
-                nums.append(&mut (start..=end).collect());
+                let start = parse_with_high_limit(elements[0],
+                                                  problem_functions.len());
+                let end = parse_with_high_limit(elements[1],
+                                                problem_functions.len());
+
+                // look into matching for Ordering for here
+                if start < end {
+                    nums.append(&mut (start..=end).collect());
+                } else {
+                    nums.append(&mut (end..=start).rev().collect());
+                }
             } else {
-                nums.push(section.parse().expect("Error: expected int"));
+                nums.push(parse_with_high_limit(section,
+                                                problem_functions.len()));
             }
         }
     }
@@ -86,6 +107,25 @@ EXAMPLES:
     }
 }
 
+
+fn parse_with_high_limit(limit: &str, high_bound: usize) -> usize {
+    match limit.parse() {
+        Err(e) => {
+            println!("Error Parsing Number: {}", e);
+            exit(1);
+        },
+        Ok(num) => {
+            if num < 1 || num > high_bound {
+                println!("Error Parsing Number: {} should be \
+                         within 1 and {}", limit,
+                         high_bound);
+                exit(1);
+            }
+
+            num
+        }
+    }
+}
 
 fn run<F>(problems: Vec<F>, numbers: &[usize])
 where F: Fn() -> String
