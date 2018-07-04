@@ -5,6 +5,9 @@ authors = ["LovecraftianHorror <LovecraftianHorror@pm.me>"]
 
 [dependencies]
 time = "*"
+docopt = "1"
+serde = "1.0"
+serde_derive = "1.0"
 problem_1 = { path = "../../Problems/Problem_1/Rust/problem_1" }
 problem_2 = { path = "../../Problems/Problem_2/Rust/problem_2" }
 problem_3 = { path = "../../Problems/Problem_3/Rust/problem_3" }

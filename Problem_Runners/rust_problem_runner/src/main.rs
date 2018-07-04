@@ -1,12 +1,46 @@
+#[macro_use]
+extern crate serde_derive;
+extern crate docopt;
+
 extern crate time;
 extern crate problem_1;
 extern crate problem_2;
 extern crate problem_3;
 extern crate problem_4;
 
-use std::env::args;
 use std::process::exit;
 use time::precise_time_ns;
+use docopt::Docopt;
+
+const USAGE: &'static str = "
+Usage:
+    rust_problem_runner (--help)
+    rust_problem_runner [--run PROBLEMS | --bench PROBLEMS]
+
+Options:
+    -h --help            Shows this screen
+    -r --run PROBLEMS    Runs the specified problem's solution
+    -b --bench PROBLEMS  Benchmarks the specified problem's solution
+
+Arguments:
+    PROBLEMS  Problems can be specified with 3 forms where # is a number
+                  all: all is special and specifies all solutions
+                  #,#: will run the first number, then the second and can be
+                       chained like #,#,#,#
+                  #:#: will run all the soltuions from the first number to the
+                       second number, can be chained with commas like #:#,#:#
+
+Examples:
+    rust_problem_runner -r 1
+        Runs the first problem's solution
+    rust_problem_runner -b 3,1,2
+        Benchmarks problems 3, 1, then 2
+";
+#[derive(Debug, Deserialize)]
+struct Args {
+    flag_run: String,
+    flag_bench: String,
+}
 
 
 fn main() {
@@ -17,63 +51,22 @@ fn main() {
         problem_four as fn() -> String,
     ];
 
-    let usage = "USAGE:
-    rust_problem_runner [--help | --run PROBLEMS | --bench PROBLEMS]\n
-OPTIONS:
-    -h --help            Shows this screen
-    -r --run PROBLEMS    Runs the specified problem's solution
-    -b --bench PROBLEMS  Benchmarks the specified problem's solution\n
-ARGUMENTS:
-    PROBLEMS  Problems can be specified with 3 forms where # is a number
-                  all: all is special and specifies all solutions
-                  #,#: will run the first number, then the second and can be
-                       chained like #,#,#,#
-                  #:#: will run all the soltuions from the first number to the
-                       second number, can be chained with commas like #:#,#:#\n
-EXAMPLES:
-    rust_problem_runner -r 1
-        Runs the first problem's solution
-    rust_problem_runner -b 3,1,2
-        Benchmarks problems 3, 1, then 2\n";
-
-    let parsed: Vec<String> = args().skip(1).collect();
-
-    // The below code is all to verify correct usage of cli args
-    // 1 arg if -h flag, 2 for -r or -b to give problem numbers
-    if parsed.len() < 1 || parsed.len() > 2 {
-        println!("{}", usage);
-        exit(1);
-    }
-
-    let bench_probs = parsed[0] == "-b" || parsed[0] == "--bench";
-    let run_probs = parsed[0] == "-r" || parsed[0] == "--run";
-    let help = parsed[0] == "-h" || parsed[0] == "--help";
-
-    // Incorrect usage if no flags, or run and bench flags
-    if !(bench_probs || run_probs || help) {
-        println!("{}", usage);
-        exit(1);
-    }
-
-    if help {
-        println!("{}", usage);
-        exit(0);
-    }
-
-    if (bench_probs || run_probs) && parsed.len() != 2 {
-        println!("Expected 1 argument after --bench or --run, saw {}",
-                 parsed.len() - 1);
-        exit(1);
-    }
+    let args: Args = Docopt::new(USAGE)
+                            .and_then(|d| d.deserialize())
+                            .unwrap_or_else(|e| e.exit());
+    let problems = if args.flag_bench != "" {
+        &args.flag_bench
+    } else {
+        &args.flag_run
+    };
 
     // move this to a function
     // Parse problem numbers to run
     let mut nums = Vec::new();
-    if parsed[1] == "all" {
+    if problems == "all" {
         nums = (1..=problem_functions.len()).collect();
     } else {
-        //let mut error_index = 0;
-        for section in parsed[1].split(',') {
+        for section in problems.split(',') {
             if section.contains(':') {
                 let elements: Vec<&str> = section.split(':').collect();
                 if elements.len() != 2 {
@@ -100,7 +93,7 @@ EXAMPLES:
         }
     }
 
-    if bench_probs {
+    if args.flag_bench != "" {
         bench(problem_functions, &nums);
     } else {
         run(problem_functions, &nums);
