@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 '''
 Usage:
-    python_problem_runner [--help | --run PROBLEMS | --bench PROBLEMS]
+    python_problem_runner (--help)
+    python_problem_runner [--run PROBLEMS | --bench PROBLEMS]
 
 Arguments:
-    PROBLEMS             The problems to run in a comma separated list e.g. 1,3
+    PROBLEMS  Problems can be specified with 3 forms where # is a number
+                  all: all is special and specifies all solutions
+                  #,#: will run the first number, then the second and can be
+                       chained like #,#,#,#
+                  #:#: will run all the soltuions from the first number to the
+                       second number, can be chained with commas like #:#,#:#
 
 OPTIONS:
     -h --help            Shows this screen
@@ -40,20 +46,50 @@ def main():
     else:
         numbers = arguments['--run']
 
-    parsed_numbers = []
-    for n in numbers.split(','):
-        # TODO: need a try catch here for parsing failure
-        n = int(n)
-        if n < 1 or n > HIGHEST_PROBLEM:
-            print((f'Error parsing arg: number should be from 1 to'
-                   f' {HIGHEST_PROBLEM}, saw {n}'))
-            sys.exit(1)
-        parsed_numbers.append(n)
+    numbers = parse_problems(numbers, HIGHEST_PROBLEM)
 
     if arguments['--bench']:
-        bench(parsed_numbers)
+        bench(numbers)
     else:
-        run(parsed_numbers)
+        run(numbers)
+
+
+def parse_problems(raw, high_bound):
+    parsed = []
+    if raw == 'all':
+        parsed = [i for i in range(1, high_bound + 1)]
+    else:
+        for section in raw.split(','):
+            if ':' in section:
+                limits = section.split(':')
+                if len(limits) != 2:
+                    print('Error: ranges cannot be chained and must be in the'
+                          ' form of #:# like 1:3')
+                    sys.exit(1)
+
+                start = parse_with_high_limit(limits[0], high_bound)
+                end = parse_with_high_limit(limits[1], high_bound)
+
+                if start < end:
+                    parsed += [i for i in range(start, end + 1)]
+                else:
+                    parsed += [i for i in range(start, end - 1, -1)]
+            else:
+                parsed.append(parse_with_high_limit(section, high_bound))
+    return parsed
+
+
+def parse_with_high_limit(raw, high_bound):
+    try:
+        parsed =  int(raw)
+        if parsed > 0 and parsed <= high_bound:
+            return parsed
+        else:
+            print(f'Error Parsing Number: {parsed} should be within 1 and'
+                  f' {high_bound}')
+            sys.exit(1)
+    except ValueError:
+        print(f'Error parsing number from: {raw}')
 
 
 def run(numbers):
@@ -76,7 +112,9 @@ def run(numbers):
 def bench(numbers):
     for number in numbers:
         times = []
-        for i in range(5000):
+        print('===================================================')
+        print(f'[Benchmarking Problem {number}]')
+        for i in range(10000):
             start = datetime.now()
 
             if number == 1:
@@ -91,8 +129,6 @@ def bench(numbers):
             times.append((datetime.now() - start).microseconds)
 
         mean, deviation = standard_deviation(times)
-        print('===================================================')
-        print(f'[Benchmarking Problem {number}]')
         print(f'mean ± σ [µs]: {mean:.2f} ± {deviation:.2f}')
     print('===================================================')
 
