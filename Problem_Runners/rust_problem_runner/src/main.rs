@@ -71,16 +71,16 @@ fn main() {
 
 
 fn parse_problems(raw: &str, high_bound: usize) -> Vec<usize> {
-    let mut numbers = Vec::new();
+    let mut parsed = Vec::new();
     if raw == "all" {
-        numbers = (1..=high_bound).collect();
+        parsed = (1..=high_bound).collect();
     } else {
         for section in raw.split(',') {
             if section.contains(':') {
                 let limits: Vec<&str> = section.split(':').collect();
                 if limits.len() != 2 {
-                    println!("Error: ranges can not be chained and must be in \
-                             the form of number:number like 1:3");
+                    println!("Error: ranges cannot be chained and must be in \
+                             the form of #:# like 1:3");
                     exit(1);
                 }
 
@@ -89,21 +89,21 @@ fn parse_problems(raw: &str, high_bound: usize) -> Vec<usize> {
 
                 // look into matching for Ordering for here
                 if start < end {
-                    numbers.append(&mut (start..=end).collect());
+                    parsed.append(&mut (start..=end).collect());
                 } else {
-                    numbers.append(&mut (end..=start).rev().collect());
+                    parsed.append(&mut (end..=start).rev().collect());
                 }
             } else {
-                numbers.push(parse_with_high_limit(section, high_bound));
+                parsed.push(parse_with_high_limit(section, high_bound));
             }
         }
     }
-    numbers
+    parsed
 }
 
 
-fn parse_with_high_limit(limit: &str, high_bound: usize) -> usize {
-    match limit.parse() {
+fn parse_with_high_limit(raw: &str, high_bound: usize) -> usize {
+    match raw.parse() {
         Err(e) => {
             println!("Error Parsing Number: {}", e);
             exit(1);
@@ -111,7 +111,7 @@ fn parse_with_high_limit(limit: &str, high_bound: usize) -> usize {
         Ok(num) => {
             if num < 1 || num > high_bound {
                 println!("Error Parsing Number: {} should be \
-                         within 1 and {}", limit,
+                         within 1 and {}", raw,
                          high_bound);
                 exit(1);
             }
