@@ -60,44 +60,45 @@ fn main() {
         &args.flag_run
     };
 
-    // move this to a function
-    // Parse problem numbers to run
-    let mut nums = Vec::new();
-    if problems == "all" {
-        nums = (1..=problem_functions.len()).collect();
+    let numbers = parse_problems(problems, problem_functions.len());
+
+    if args.flag_bench != "" {
+        bench(problem_functions, &numbers);
     } else {
-        for section in problems.split(',') {
+        run(problem_functions, &numbers);
+    }
+}
+
+
+fn parse_problems(raw: &str, high_bound: usize) -> Vec<usize> {
+    let mut numbers = Vec::new();
+    if raw == "all" {
+        numbers = (1..=high_bound).collect();
+    } else {
+        for section in raw.split(',') {
             if section.contains(':') {
-                let elements: Vec<&str> = section.split(':').collect();
-                if elements.len() != 2 {
+                let limits: Vec<&str> = section.split(':').collect();
+                if limits.len() != 2 {
                     println!("Error: ranges can not be chained and must be in \
                              the form of number:number like 1:3");
                     exit(1);
                 }
 
-                let start = parse_with_high_limit(elements[0],
-                                                  problem_functions.len());
-                let end = parse_with_high_limit(elements[1],
-                                                problem_functions.len());
+                let start = parse_with_high_limit(limits[0], high_bound);
+                let end = parse_with_high_limit(limits[1], high_bound);
 
                 // look into matching for Ordering for here
                 if start < end {
-                    nums.append(&mut (start..=end).collect());
+                    numbers.append(&mut (start..=end).collect());
                 } else {
-                    nums.append(&mut (end..=start).rev().collect());
+                    numbers.append(&mut (end..=start).rev().collect());
                 }
             } else {
-                nums.push(parse_with_high_limit(section,
-                                                problem_functions.len()));
+                numbers.push(parse_with_high_limit(section, high_bound));
             }
         }
     }
-
-    if args.flag_bench != "" {
-        bench(problem_functions, &nums);
-    } else {
-        run(problem_functions, &nums);
-    }
+    numbers
 }
 
 
