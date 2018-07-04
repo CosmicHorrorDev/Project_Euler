@@ -1,12 +1,46 @@
+#[macro_use]
+extern crate serde_derive;
+extern crate docopt;
+
 extern crate time;
 extern crate problem_1;
 extern crate problem_2;
 extern crate problem_3;
 extern crate problem_4;
 
-use std::env::args;
 use std::process::exit;
 use time::precise_time_ns;
+use docopt::Docopt;
+
+const USAGE: &'static str = "
+Usage:
+    rust_problem_runner (--help)
+    rust_problem_runner [--run PROBLEMS | --bench PROBLEMS]
+
+Options:
+    -h --help            Shows this screen
+    -r --run PROBLEMS    Runs the specified problem's solution
+    -b --bench PROBLEMS  Benchmarks the specified problem's solution
+
+Arguments:
+    PROBLEMS  Problems can be specified with 3 forms where # is a number
+                  all: all is special and specifies all solutions
+                  #,#: will run the first number, then the second and can be
+                       chained like #,#,#,#
+                  #:#: will run all the soltuions from the first number to the
+                       second number, can be chained with commas like #:#,#:#
+
+Examples:
+    rust_problem_runner -r 1
+        Runs the first problem's solution
+    rust_problem_runner -b 3,1,2
+        Benchmarks problems 3, 1, then 2
+";
+#[derive(Debug, Deserialize)]
+struct Args {
+    flag_run: String,
+    flag_bench: String,
+}
 
 
 fn main() {
@@ -17,66 +51,75 @@ fn main() {
         problem_four as fn() -> String,
     ];
 
-    let mut usage = String::new();
-    usage += "USAGE:\n";
-    usage += "\trust_problem_runner [--help | --run PROBLEMS | --bench PROBLEMS]\n\n";
-    usage += "OPTIONS:\n";
-    usage += "\t-h --help            Shows this screen\n";
-    usage += "\t-r --run PROBLEMS    Runs the specified problem's programs given in a comma separated list\n";
-    usage += "\t-b --bench PROBLEMS  Benchmarks the specified problem's programs given in a comma separated list\n\n";
-    usage += "EXAMPLES:\n";
-    usage += "\trust_problem_runner -r 1\n";
-    usage += "\t\tRuns the first problem's solution\n";
-    usage += "\trust_problem_runner -b 3,1,2\n";
-    usage += "\t\tBenchmarks problems 3, 1, then 2\n";
-
-    let mut parsed = Vec::new();
-    for arg in args().skip(1) {
-        parsed.push(arg);
-    }
-
-    // The below code is all to verify correct usage of cli args
-    // 1 arg if -h flag, 2 for -r or -b to give problem numbers
-    if parsed.len() < 1 || parsed.len() > 2 {
-        panic!(usage);
-    }
-
-    let bench_probs = parsed[0] == "-b" || parsed[0] == "--bench";
-    let run_probs = parsed[0] == "-r" || parsed[0] == "--run";
-    let help = parsed[0] == "-h" || parsed[0] == "--help";
-
-    // Incorrect usage if no flags, or run and bench flags
-    if !(bench_probs || run_probs || help) || (bench_probs && run_probs) {
-        panic!(usage)
-    }
-
-    if help {
-        println!("{}", usage);
-        exit(0);
-    }
-
-    // Parse problem numbers to run
-    let mut nums = Vec::new();
-    for num in parsed[1].split(",") {
-        nums.push(match num.parse() {
-            Err(_) => {
-                panic!(format!("Error parsing arg, expected int, saw {}",
-                               num));
-            }
-            Ok(n) => {
-                assert!(n > 0 && n <= problem_functions.len());
-                n
-            }
-        });
-    }
-
-    if bench_probs {
-        bench(problem_functions, &nums);
+    let args: Args = Docopt::new(USAGE)
+                            .and_then(|d| d.deserialize())
+                            .unwrap_or_else(|e| e.exit());
+    let problems = if args.flag_bench != "" {
+        &args.flag_bench
     } else {
-        run(problem_functions, &nums);
+        &args.flag_run
+    };
+
+    let numbers = parse_problems(problems, problem_functions.len());
+
+    if args.flag_bench != "" {
+        bench(problem_functions, &numbers);
+    } else {
+        run(problem_functions, &numbers);
     }
 }
 
+
+fn parse_problems(raw: &str, high_bound: usize) -> Vec<usize> {
+    let mut parsed = Vec::new();
+    if raw == "all" {
+        parsed = (1..=high_bound).collect();
+    } else {
+        for section in raw.split(',') {
+            if section.contains(':') {
+                let limits: Vec<&str> = section.split(':').collect();
+                if limits.len() != 2 {
+                    println!("Error: ranges cannot be chained and must be in \
+                             the form of #:# like 1:3");
+                    exit(1);
+                }
+
+                let start = parse_with_high_limit(limits[0], high_bound);
+                let end = parse_with_high_limit(limits[1], high_bound);
+
+                // look into matching for Ordering for here
+                if start < end {
+                    parsed.append(&mut (start..=end).collect());
+                } else {
+                    parsed.append(&mut (end..=start).rev().collect());
+                }
+            } else {
+                parsed.push(parse_with_high_limit(section, high_bound));
+            }
+        }
+    }
+    parsed
+}
+
+
+fn parse_with_high_limit(raw: &str, high_bound: usize) -> usize {
+    match raw.parse() {
+        Err(e) => {
+            println!("Error Parsing Number: {}", e);
+            exit(1);
+        },
+        Ok(num) => {
+            if num < 1 || num > high_bound {
+                println!("Error Parsing Number: {} should be \
+                         within 1 and {}", raw,
+                         high_bound);
+                exit(1);
+            }
+
+            num
+        }
+    }
+}
 
 fn run<F>(problems: Vec<F>, numbers: &[usize])
 where F: Fn() -> String
@@ -94,6 +137,9 @@ fn bench<F>(problems: Vec<F>, numbers: &[usize])
 where F: Fn() -> String
 {
     for number in numbers.iter() {
+        println!("===================================================");
+        println!("[Benchmarking Problem {}]", *number);
+
         let mut times = Vec::new();
         // Eventually dig in to automatically determining sample size but for
         // now this will do
@@ -105,10 +151,7 @@ where F: Fn() -> String
 
             index -= 1;
         }
-
         let (mean, deviation) = standard_deviation(&times);
-        println!("===================================================");
-        println!("[Benchmarking Problem {}]", *number);
         println!("mean ± σ [µs]: {:.2} ± {:.2}",
                  mean / 1000.0, deviation / 1000.0);
     }
@@ -154,7 +197,7 @@ fn problem_four() -> String {
     let upper = 1000;
     let (num1, num2) = problem_4::largest_palindrome_product(upper);
     let product = num1 * num2;
-    format!(" The largest palindrome product is {} = {} * {}",
+    format!("The largest palindrome product is {} = {} * {}",
             product, num1, num2)
 }
 
