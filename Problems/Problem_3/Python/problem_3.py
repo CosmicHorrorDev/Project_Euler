@@ -25,7 +25,7 @@ def largest_prime_factor(number):
 
 if __name__ == '__main__':
     number = 600851475143
-    answer = main(number)
-    print(f'The largest prime factor of {number} is {answer}')
+    prime_factor = largest_prime_factor(number)
+    print(f'The largest prime factor of {number} is {prime_factor}')
 
 

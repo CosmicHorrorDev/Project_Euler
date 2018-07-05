@@ -31,5 +31,7 @@ def largest_palindrome_product(UPPER):
 
 
 if __name__ == '__main__':
-    largest_palinfdrome_product(1000)
+    slide1, slide2 = largest_palindrome_product(1000)
+    product = slide1 * slide2
+    print(f'The largest parlindrome product is {product} = {slide1} * {slide2}')
 
