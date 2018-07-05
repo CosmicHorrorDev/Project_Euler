@@ -1,11 +1,10 @@
 pub fn sum_even_fibonacci(upper: usize) -> usize {
-
     let mut sum = 2;
 
     let mut previous = 1;
     let mut current = 2;
 
-    while previous + current < upper+ 1 {
+    while previous + current < upper + 1 {
         current += previous;
         previous = current - previous;
 
