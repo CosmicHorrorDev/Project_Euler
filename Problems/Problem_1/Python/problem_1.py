@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-def sum_of_multiples_of_3_and_5(UPPERBOUND):
+def sum_multiples_of_3_and_5(UPPERBOUND):
     UPPERBOUND -= 1
     sum_mult = 5 * sum_range(UPPERBOUND // 5)
     sum_mult += 3 * sum_range(UPPERBOUND // 3)
@@ -20,5 +20,5 @@ def sum_range(upper):
 
 
 if __name__ == '__main__':
-    main()
+    sum_multiples_of_3_and_5(1000)
 
