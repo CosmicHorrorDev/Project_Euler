@@ -27,15 +27,9 @@ import sys
 from datetime import datetime
 from docopt import docopt
 
-sys.path.append('../Problems/Problem_1/Python')
-sys.path.append('../Problems/Problem_2/Python')
-sys.path.append('../Problems/Problem_3/Python')
-sys.path.append('../Problems/Problem_4/Python')
+sys.path.append('../Problems')
 
-import problem_1
-import problem_2
-import problem_3
-import problem_4
+from Problems import problem_1, problem_2, problem_3, problem_4
 
 
 def main():
