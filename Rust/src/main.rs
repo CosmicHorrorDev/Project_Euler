@@ -1,12 +1,9 @@
 #[macro_use]
 extern crate serde_derive;
 extern crate docopt;
-
 extern crate time;
-extern crate problem_1;
-extern crate problem_2;
-extern crate problem_3;
-extern crate problem_4;
+
+pub mod problems;
 
 use std::process::exit;
 use time::precise_time_ns;
@@ -174,28 +171,28 @@ fn standard_deviation(samples: &Vec<u64>) -> (f64, f64) {
 
 fn problem_one() -> String {
     let upper = 1000;
-    let sum = problem_1::sum_multiples_of_3_and_5(upper);
+    let sum = problems::problem_1::sum_multiples_of_3_and_5(upper);
     format!("The sum of multiples of 3 and 5 below {} is {}", upper, sum)
 }
 
 
 fn problem_two() -> String {
     let upper = 4000000;
-    let sum = problem_2::sum_even_fibonacci(upper);
+    let sum = problems::problem_2::sum_even_fibonacci(upper);
     format!("The sum of even Fibonacci numbers below {} is {}", upper, sum)
 }
 
 
 fn problem_three() -> String {
     let num = 600851475143;
-    let prime = problem_3::largest_prime_factor(num);
+    let prime = problems::problem_3::largest_prime_factor(num);
     format!("The largest prime factor is {}", prime)
 }
 
 
 fn problem_four() -> String {
     let upper = 1000;
-    let (num1, num2) = problem_4::largest_palindrome_product(upper);
+    let (num1, num2) = problems::problem_4::largest_palindrome_product(upper);
     let product = num1 * num2;
     format!("The largest palindrome product is {} = {} * {}",
             product, num1, num2)
