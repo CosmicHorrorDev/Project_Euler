@@ -1,4 +1,13 @@
-pub fn largest_palindrome_product(upper: usize) -> (usize, usize) {
+pub fn solution() -> String {
+    let upper = 1000;
+    let (num1, num2) = largest_palindrome_product(upper);
+    let product = num1 * num2;
+    format!("The largest palindrome product is {} = {} * {}",
+            product, num1, num2)
+}
+
+
+fn largest_palindrome_product(upper: usize) -> (usize, usize) {
     // nums move down the table by moving down then right, slides move
     // diagonally down and left
     let mut num1 = upper - 1;
