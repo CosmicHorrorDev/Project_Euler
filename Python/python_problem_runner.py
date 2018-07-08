@@ -27,8 +27,6 @@ import sys
 from datetime import datetime
 from docopt import docopt
 
-sys.path.append('../Problems')
-
 from Problems import problem_1, problem_2, problem_3, problem_4
 
 
@@ -129,25 +127,6 @@ def standard_deviation(samples):
     deviation = (sum_diff_sqrd / len(samples)) ** 0.5
 
     return mean, deviation
-
-
-def problem_two():
-    UPPER = 4000000
-    fib_sum = problem_2.sum_even_fibonacci(UPPER)
-    return f'The sum of even Fibonacci numbers below {UPPER} is {fib_sum}'
-
-
-def problem_three():
-    UPPER = 4000000
-    fib_sum = problem_2.sum_even_fibonacci(UPPER)
-    return f'The sum of even Fibonacci numbers below {UPPER} is {fib_sum}'
-
-
-def problem_four():
-    UPPER = 1000
-    num1, num2 = problem_4.largest_palindrome_product(UPPER)
-    product = num1 * num2
-    return f'The largest palindrome product is {product} = {num1} * {num2}'
 
 
 if __name__ == '__main__':
