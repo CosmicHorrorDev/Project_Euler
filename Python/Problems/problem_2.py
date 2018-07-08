@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+
+def solution():
+    UPPER = 4000000
+    fib_sum = sum_even_fibonacci(UPPER)
+    return f'The sum of even Fibonacci numbers below {UPPER} is {fib_sum}'
+
+
 def sum_even_fibonacci(upperbound):
     result = 2
 
@@ -16,7 +23,5 @@ def sum_even_fibonacci(upperbound):
 
 
 if __name__ == '__main__':
-    UPPERBOUND = 4000000
-    answer = main(4000000)
-    print(f'Sum of even Fibonacci numbers below {UPPERBOUND} is {answer}')
+    print(solution())
 

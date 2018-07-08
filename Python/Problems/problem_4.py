@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 
 
+def solution():
+    UPPER = 1000
+    num1, num2 = largest_palindrome_product(UPPER)
+    product = num1 * num2
+    return f'The largest palindrome product is {product} = {num1} * {num2}'
+
+
 def largest_palindrome_product(UPPER):
     num1 = UPPER + 1
     num2 = num1
@@ -31,5 +38,5 @@ def largest_palindrome_product(UPPER):
 
 
 if __name__ == '__main__':
-    largest_palinfdrome_product(1000)
+    print(solution())
 
