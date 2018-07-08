@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from Utils.misc import sum_range
 
 def solution():
     UPPER = 1000
@@ -15,16 +16,4 @@ def sum_of_multiples_of_3_and_5(UPPERBOUND):
 
     return sum_mult
 
-
-def sum_range(upper):
-    sum_vals = ((upper + 1) // 2) * upper
-
-    if not upper % 2:
-        sum_vals += upper / 2
-
-    return sum_vals
-
-
-if __name__ == '__main__':
-    print(solution())
 

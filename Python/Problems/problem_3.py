@@ -28,7 +28,3 @@ def largest_prime_factor(number):
 
     return index
 
-
-if __name__ == '__main__':
-    print(solution())
-

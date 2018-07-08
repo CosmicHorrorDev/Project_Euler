@@ -36,7 +36,3 @@ def largest_palindrome_product(UPPER):
 
     return slide1, slide2
 
-
-if __name__ == '__main__':
-    print(solution())
-

@@ -21,7 +21,3 @@ def sum_even_fibonacci(upperbound):
 
     return result
 
-
-if __name__ == '__main__':
-    print(solution())
-
