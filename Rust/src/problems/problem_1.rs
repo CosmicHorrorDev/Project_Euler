@@ -1,4 +1,11 @@
-pub fn sum_multiples_of_3_and_5(upper: u64) -> u64 {
+pub fn solution() -> String {
+    let upper = 1000;
+    let sum = sum_multiples_of_3_and_5(upper);
+    format!("The sum of multiples of 3 and 5 below {} is {}", upper, sum)
+}
+
+
+fn sum_multiples_of_3_and_5(upper: u64) -> u64 {
     let adj_upper = upper - 1;
     let mut sum = 5 * sum_range(adj_upper / 5);
     sum += 3 * sum_range(adj_upper / 3);

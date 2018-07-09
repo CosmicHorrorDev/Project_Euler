@@ -27,15 +27,7 @@ import sys
 from datetime import datetime
 from docopt import docopt
 
-sys.path.append('../Problems/Problem_1/Python')
-sys.path.append('../Problems/Problem_2/Python')
-sys.path.append('../Problems/Problem_3/Python')
-sys.path.append('../Problems/Problem_4/Python')
-
-import problem_1
-import problem_2
-import problem_3
-import problem_4
+from Problems import problem_1, problem_2, problem_3, problem_4
 
 
 def main():
@@ -48,10 +40,16 @@ def main():
 
     numbers = parse_problems(numbers, HIGHEST_PROBLEM)
 
+    problems = [problem_1.solution,
+                problem_2.solution,
+                problem_3.solution,
+                problem_4.solution
+    ]
+
     if arguments['--bench']:
-        bench(numbers)
+        bench(problems, numbers)
     else:
-        run(numbers)
+        run(problems, numbers)
 
 
 def parse_problems(raw, high_bound):
@@ -92,16 +90,9 @@ def parse_with_high_limit(raw, high_bound):
         print(f'Error parsing number from: {raw}')
 
 
-def run(numbers):
+def run(problems, numbers):
     for number in numbers:
-        if number == 1:
-            result = problem_one()
-        elif number == 2:
-            result = problem_two()
-        elif number == 3:
-            result = problem_three()
-        elif number == 4:
-            result = problem_four()
+        result = problems[number - 1]()
 
         print('===================================================')
         print(f'[Running Problem {number}]')
@@ -109,7 +100,7 @@ def run(numbers):
     print('===================================================')
 
 
-def bench(numbers):
+def bench(problems, numbers):
     for number in numbers:
         times = []
         print('===================================================')
@@ -117,14 +108,7 @@ def bench(numbers):
         for i in range(10000):
             start = datetime.now()
 
-            if number == 1:
-                problem_one()
-            elif number == 2:
-                problem_two()
-            elif number == 3:
-                problem_three()
-            elif number == 4:
-                problem_four()
+            problems[number - 1]()
 
             times.append((datetime.now() - start).microseconds)
 
@@ -143,31 +127,6 @@ def standard_deviation(samples):
     deviation = (sum_diff_sqrd / len(samples)) ** 0.5
 
     return mean, deviation
-
-
-def problem_one():
-    UPPER = 1000
-    mult_sum = problem_1.sum_of_multiples_of_3_and_5(UPPER)
-    return f'The sum of multiples of 3 and 5 below {UPPER} is {mult_sum}'
-
-
-def problem_two():
-    UPPER = 4000000
-    fib_sum = problem_2.sum_even_fibonacci(UPPER)
-    return f'The sum of even Fibonacci numbers below {UPPER} is {fib_sum}'
-
-
-def problem_three():
-    VAL = 600851475143
-    factor = problem_3.largest_prime_factor(VAL)
-    return f'The largest prime factor of {VAL} is {factor}'
-
-
-def problem_four():
-    UPPER = 1000
-    num1, num2 = problem_4.largest_palindrome_product(UPPER)
-    product = num1 * num2
-    return f'The largest palindrome product is {product} = {num1} * {num2}'
 
 
 if __name__ == '__main__':

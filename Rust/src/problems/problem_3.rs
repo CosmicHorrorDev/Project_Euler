@@ -1,4 +1,11 @@
-pub fn largest_prime_factor(num: u64) -> u64 {
+pub fn solution() -> String {
+    let num = 600851475143;
+    let prime = largest_prime_factor(num);
+    format!("The largest prime factor is {}", prime)
+}
+
+
+fn largest_prime_factor(num: u64) -> u64 {
     let mut number = num;
     let mut index = 3;
 

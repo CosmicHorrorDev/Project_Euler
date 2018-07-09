@@ -1,6 +1,10 @@
 [package]
-name = "problem_4"
+name = "Rust"
 version = "0.1.0"
 authors = ["LovecraftianHorror <LovecraftianHorror@pm.me>"]
 
 [dependencies]
+time = "*"
+docopt = "1"
+serde = "1.0"
+serde_derive = "1.0"
