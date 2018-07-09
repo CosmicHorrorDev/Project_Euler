@@ -31,6 +31,8 @@ fn largest_palindrome_product(upper: usize) -> (usize, usize) {
             slide1 += 1;
             slide2 -= 1;
         }
+        //TODO: try using a named loop so that the break doesn't have to be
+        // cascaded, may save some cycles
         // Cascades the break
         if palindrome {
             break;

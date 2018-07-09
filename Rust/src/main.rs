@@ -48,6 +48,9 @@ fn main() {
         problem_2::solution as fn() -> String,
         problem_3::solution as fn() -> String,
         problem_4::solution as fn() -> String,
+        problem_5::solution as fn() -> String,
+        problem_6::solution as fn() -> String,
+        problem_9::solution as fn() -> String,
     ];
 
     let args: Args = Docopt::new(USAGE)
