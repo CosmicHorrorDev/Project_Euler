@@ -1,10 +1,10 @@
 ## Project Euler
 
-These are my solutions to the [Project Euler](projecteuler.net) challenges. I am much more familiar with Python than I am with Rust, so the Rust solutions probably aren't the best.
+These are my solutions to the [Project Euler](projecteuler.net) challenges. The different solutions are worked out in the repsective language's folder, and are all run or timed from their `main.\*` scripts. The Explanations on different reasonings behind how the problems are solved can be found in the Explanations folder.
 
 ### Benchmarks
 
-The benchmarks are done using the different Problem Runners in the different languages directories. Benchmarking consists of timing the problems for 10,000 rounds, then determining the mean and standard devition. This is done in the program itself to try and minimize the overhead and give a good representation, but as usual these benchmarks are not a good representation of everyones' personal case.
+Benchmarking at the moment consists of timing the problems for 10,000 rounds, then determining the mean and standard devition. This is done in the program itself to try and minimize the overhead and give a good representation, but as usual these benchmarks are not a good representation of everyones' personal case.
 
 | Problem | Language | Mean ± σ [µs] |
 |:---|:---|---:|
