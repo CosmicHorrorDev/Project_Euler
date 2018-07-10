@@ -28,13 +28,3 @@ def largest_prime_factor(number):
 
     return index
 
-<<<<<<< HEAD:Problems/Problem_3/Python/problem_3.py
-
-if __name__ == '__main__':
-    number = 600851475143
-    prime_factor = largest_prime_factor(number)
-    print(f'The largest prime factor of {number} is {prime_factor}')
-
-
-=======
->>>>>>> refactorProblemRunners:Python/Problems/problem_3.py
