@@ -36,12 +36,3 @@ def largest_palindrome_product(UPPER):
 
     return slide1, slide2
 
-<<<<<<< HEAD:Problems/Problem_4/Python/problem_4.py
-
-if __name__ == '__main__':
-    slide1, slide2 = largest_palindrome_product(1000)
-    product = slide1 * slide2
-    print(f'The largest parlindrome product is {product} = {slide1} * {slide2}')
-
-=======
->>>>>>> refactorProblemRunners:Python/Problems/problem_4.py

@@ -1,6 +1,3 @@
-<<<<<<< HEAD:Problems/Problem_2/Rust/problem_2/src/lib.rs
-pub fn sum_even_fibonacci(upper: usize) -> usize {
-=======
 pub fn solution() -> String {
     let upper = 4000000;
     let sum = sum_even_fibonacci(upper);
@@ -9,8 +6,6 @@ pub fn solution() -> String {
 
 
 fn sum_even_fibonacci(upper: usize) -> usize {
-
->>>>>>> refactorProblemRunners:Rust/src/problems/problem_2.rs
     let mut sum = 2;
 
     let mut previous = 1;
