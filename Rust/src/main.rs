@@ -51,6 +51,7 @@ fn main() {
         problem_4::solution as fn() -> String,
         problem_5::solution as fn() -> String,
         problem_6::solution as fn() -> String,
+        problem_7::solution as fn() -> String,
         problem_9::solution as fn() -> String,
     ];
 
