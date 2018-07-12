@@ -48,6 +48,10 @@ fn prime_sieve(num: usize, primes: &[usize]) -> bool {
         if num % prime == 0 {
             return false;
         }
+
+        if (num as f32) / (*prime as f32) < (*prime as f32) {
+            return true;
+        }
     }
     true
 }
