@@ -4,6 +4,7 @@ extern crate docopt;
 extern crate time;
 
 pub mod problems;
+pub mod utils;
 
 use problems::*;
 use std::process::exit;

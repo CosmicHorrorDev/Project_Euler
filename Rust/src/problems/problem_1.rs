@@ -1,3 +1,6 @@
+use utils::misc::sum_range;
+
+
 pub fn solution() -> String {
     let upper = 1000;
     let sum = sum_multiples_of_3_and_5(upper);
@@ -5,22 +8,11 @@ pub fn solution() -> String {
 }
 
 
-fn sum_multiples_of_3_and_5(upper: u64) -> u64 {
+fn sum_multiples_of_3_and_5(upper: usize) -> usize {
     let adj_upper = upper - 1;
     let mut sum = 5 * sum_range(adj_upper / 5);
     sum += 3 * sum_range(adj_upper / 3);
     sum -= 15 * sum_range(adj_upper / 15);
-
-    sum
-}
-
-
-fn sum_range(upper: u64) -> u64 {
-    let mut sum = ((upper + 1) / 2) * upper;
-
-    if upper % 2 == 0 {
-        sum += upper / 2;
-    }
 
     sum
 }

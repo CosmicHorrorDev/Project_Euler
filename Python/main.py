@@ -44,7 +44,7 @@ def main():
                 problem_2.solution,
                 problem_3.solution,
                 problem_4.solution
-    ]
+               ]
 
     if arguments['--bench']:
         bench(problems, numbers)
