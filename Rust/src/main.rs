@@ -140,21 +140,28 @@ where F: Fn() -> String
 fn bench<F>(problems: Vec<F>, numbers: &[usize])
 where F: Fn() -> String
 {
+    let max_rounds = 10000;
+    let min_rounds = 10;
     for number in numbers.iter() {
         println!("===================================================");
         println!("[Benchmarking Problem {}]", *number);
 
-        let mut times = Vec::new();
-        // Eventually dig in to automatically determining sample size but for
-        // now this will do
-        let mut index = 10000;
-        while index > 0 {
-            let start = precise_time_ns();
-            problems[*number - 1]();
-            times.push(precise_time_ns() - start);
+        // Run through min_rounds to see how many more rounds should be done
+        let mut times = time_solution(&problems[*number - 1], min_rounds);
 
-            index -= 1;
+        // Floored division shouldn't be a problem here
+        // Get average to see how many more rounds can be done in 1 minute
+        let sum: u64 = times.iter().sum();
+        let mean = sum as usize / times.len();
+        let mut rounds = 60000000000 / mean;
+        if rounds < 10 {
+            rounds = 0;
+        } else if rounds > max_rounds - min_rounds {
+            rounds = max_rounds - min_rounds;
         }
+
+        times.append(&mut time_solution(&problems[*number - 1], rounds));
+
         let (mean, deviation) = standard_deviation(&times);
         println!("mean ± σ [µs]: {:.2} ± {:.2}",
                  mean / 1000.0, deviation / 1000.0);
@@ -162,6 +169,22 @@ where F: Fn() -> String
     println!("===================================================");
 }
 
+
+fn time_solution<F>(problem: F, rounds: usize) -> Vec<u64>
+where F: Fn() -> String
+{
+    let mut index = 0;
+    let mut times = Vec::with_capacity(rounds);
+    while index < rounds {
+        let start = precise_time_ns();
+        problem();
+        times.push(precise_time_ns() - start);
+
+        index += 1;
+    }
+
+    times
+}
 
 fn standard_deviation(samples: &Vec<u64>) -> (f64, f64) {
     let sum: u64 = samples.iter().sum();
