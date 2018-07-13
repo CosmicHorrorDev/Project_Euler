@@ -23,7 +23,7 @@ fn largest_palindrome_product(upper: usize) -> (usize, usize) {
         let mut palindrome = false;
         // The condition represents the edge of the table
         while slide1 < upper && slide2 > 0 {
-            palindrome = is_palindrome(&reverse_split(&mut (slide1 * slide2)));
+            palindrome = is_palindrome(slide1 * slide2);
             if palindrome {
                 break;
             }
@@ -51,29 +51,28 @@ fn largest_palindrome_product(upper: usize) -> (usize, usize) {
 }
 
 
-fn reverse_split(num: &mut usize) -> Vec<usize> {
-    let mut digits = Vec::new();
-
-    while *num > 0 {
-        // Stripped is *num with 0 in the ones place
-        let stripped = *num / 10 * 10;
-
-        // Store ones place
-        let digit = *num - stripped;
-        digits.push(digit);
-
-        // On to the next digit
-        *num = stripped / 10;
+fn is_palindrome(num: usize) -> bool {
+    let mut num_compare = num as isize;
+    let mut slide = 1;
+    while slide < num_compare {
+        slide *= 10;
     }
-    digits
-}
+    slide /= 10;
 
+    while num_compare > 9 {
+        let stripped = num_compare / 10 * 10;
+        let digit = num_compare - stripped;
+        num_compare -= digit * slide;
 
-fn is_palindrome<T>(v: &[T]) -> bool
-where
-    T: Eq,
-{
-    v.iter().eq(v.iter().rev())
+        if num_compare >= slide || num_compare <= -1 {
+            return false;
+        }
+
+        slide /= 100;
+        num_compare /= 10;
+    }
+
+    true
 }
 
 
@@ -84,5 +83,14 @@ mod tests {
     #[test]
     fn it_works() {
         assert_eq!(largest_palindrome_product(100), (99, 91));
+    }
+
+    #[test]
+    fn test_is_palindrome() {
+        assert_eq!(is_palindrome(9009), true);
+        assert_eq!(is_palindrome(12321), true);
+        assert_eq!(is_palindrome(1231), false);
+        assert_eq!(is_palindrome(3112), false);
+        assert_eq!(is_palindrome(1000), false);
     }
 }

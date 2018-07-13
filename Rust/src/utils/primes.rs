@@ -12,7 +12,7 @@ pub fn nth_prime(n: usize) -> usize {
 }
 
 
-pub fn largest_prime(upper: usize) -> usize {
+pub fn prime_below(upper: usize) -> usize {
     let mut primes = vec![2];
     let mut index = 3;
     while index <= upper {
@@ -46,10 +46,14 @@ pub fn is_prime(num: usize) -> bool {
 fn prime_sieve(num: usize, primes: &[usize]) -> bool {
     for prime in primes {
         if num % prime == 0 {
+            return false;
+        }
+
+        if (num as f32) / (*prime as f32) < (*prime as f32) {
             return true;
         }
     }
-    false
+    true
 }
 
 
@@ -63,5 +67,29 @@ mod tests {
         assert_eq!(is_prime(3), true);
         assert_eq!(is_prime(4), false);
         assert_eq!(is_prime(5), true);
+    }
+
+
+    #[test]
+    fn test_prime_sieve() {
+        assert_eq!(prime_sieve(3, &vec![2]), true);
+        assert_eq!(prime_sieve(4, &vec![2, 3]), false);
+        assert_eq!(prime_sieve(5, &vec![2, 3]), true);
+    }
+
+
+    #[test]
+    fn test_prime_below() {
+        assert_eq!(prime_below(10), 7);
+        assert_eq!(prime_below(100), 97);
+    }
+
+
+    #[test]
+    fn test_nth_prime() {
+        assert_eq!(nth_prime(1), 2);
+        assert_eq!(nth_prime(2), 3);
+        assert_eq!(nth_prime(3), 5);
+        assert_eq!(nth_prime(4), 7);
     }
 }
