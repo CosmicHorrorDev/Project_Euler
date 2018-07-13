@@ -1,7 +1,12 @@
 pub fn nth_prime(n: usize) -> usize {
-    let mut primes = vec![2];
-    let mut index = 3;
-    while primes.len() < n {
+    if n == 1 {
+        return 2;
+    }
+
+    let mut primes = Vec::with_capacity(n - 1);
+    primes.push(3);
+    let mut index = 5;
+    while primes.len() < n - 1 {
         if prime_sieve(index, &primes) {
             primes.push(index);
         }
