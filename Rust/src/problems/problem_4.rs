@@ -81,7 +81,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
+    fn test_largest_palindrome_product() {
         assert_eq!(largest_palindrome_product(100), (99, 91));
     }
 
