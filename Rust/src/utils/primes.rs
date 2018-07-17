@@ -66,12 +66,27 @@ fn prime_sieve(num: usize, primes: &[usize]) -> bool {
 mod tests {
     use super::*;
 
+    fn primes_helper() -> Vec<usize> {
+        vec![2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
+        61, 67, 71, 73, 79, 83, 89, 97]
+    }
+
     #[test]
     fn test_is_prime() {
-        assert_eq!(is_prime(2), true);
-        assert_eq!(is_prime(3), true);
-        assert_eq!(is_prime(4), false);
-        assert_eq!(is_prime(5), true);
+        // Build vec of primes with index for reference
+        let mut i = 0;
+        let known_primes = primes_helper();
+
+        for check in 2..98 {
+            if check == known_primes[i] {
+                // check should be a prime number, inc to next known_prime
+                assert!(is_prime(check));
+                i += 1;
+            } else {
+                // check is not prime, keep working on current known_prime
+                assert!(!is_prime(check));
+            }
+        }
     }
 
 
