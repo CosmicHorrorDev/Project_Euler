@@ -20,7 +20,7 @@ pub fn nth_prime(n: usize) -> usize {
 pub fn prime_below(upper: usize) -> usize {
     let mut primes = vec![2];
     let mut index = 3;
-    while index <= upper {
+    while index < upper {
         if prime_sieve(index, &primes) {
             primes.push(index);
         }
@@ -92,24 +92,40 @@ mod tests {
 
     #[test]
     fn test_prime_sieve() {
-        assert_eq!(prime_sieve(3, &vec![2]), true);
-        assert_eq!(prime_sieve(4, &vec![2, 3]), false);
-        assert_eq!(prime_sieve(5, &vec![2, 3]), true);
+        let mut primes = vec![2];
+        for i in 3..100 {
+            if prime_sieve(i, &primes) {
+                primes.push(i);
+            }
+        }
+
+        // Check if prime sieve built the right list
+        assert_eq!(primes, primes_helper());
     }
 
 
     #[test]
     fn test_prime_below() {
-        assert_eq!(prime_below(10), 7);
-        assert_eq!(prime_below(100), 97);
+        let known_primes = primes_helper();
+
+        for i in 3..100 {
+            let lower_primes = known_primes.iter()
+                                           .filter(|&p| *p < i)
+                                           .collect::<Vec<_>>();
+            let highest_prime = lower_primes[lower_primes.len() - 1];
+
+            println!("{}", i);
+            assert_eq!(prime_below(i), *highest_prime);
+        }
     }
 
 
     #[test]
     fn test_nth_prime() {
-        assert_eq!(nth_prime(1), 2);
-        assert_eq!(nth_prime(2), 3);
-        assert_eq!(nth_prime(3), 5);
-        assert_eq!(nth_prime(4), 7);
+        let known_primes = primes_helper();
+
+        for (i, &prime) in known_primes.iter().enumerate() {
+            assert_eq!(nth_prime(i + 1), prime);
+        }
     }
 }
