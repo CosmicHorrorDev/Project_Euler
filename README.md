@@ -4,15 +4,29 @@ These are my solutions to the [Project Euler](projecteuler.net) challenges. The 
 
 ### Benchmarks
 
-Benchmarking at the moment consists of timing the problems for 10,000 rounds, then determining the mean and standard devition. This is done in the program itself to try and minimize the overhead and give a good representation, but as usual these benchmarks are not a good representation of everyones' personal case.
+*Note: These solutions may use different techniques and should not be used to compare the speed of the languages*
 
-| Problem | Language | Mean ± σ [µs] |
-|:---|:---|---:|
-| Problem 1 | Python | 1.98 ± 0.60 |
-| | Rust | 0.38 ± 0.46 |
-| Problem 2 | Python | 5.76 ± 1.00 |
-| | Rust | 0.28 ± 0.05 |
-| Problem 3 | Python |  555.22 ± 8.52|
-| | Rust | 32.46 ± 1.90 |
-| Problem 4 | Python | 1597.57 ± 23.13 |
-| | Rust | 174.97 ± 5.52 |
+The benchmarks will run each solution 10 times, based on the speed of these 10 times it will run the solution continuously for one minute, or 9,990 more times, whichever one will complete first. With these timings it will then calculate the mean and standard deviation of how long the solution takes to run.
+
+#### Python
+
+| Problem | Mean ± σ [µs] |
+|:---|---:|
+| Problem 1 | 1.98 ± 0.60 |
+| Problem 2 | 5.76 ± 1.00 |
+| Problem 3 | 555.22 ± 8.52 |
+| Problem 4 | 1597.57 ± 23.13 |
+
+#### Rust
+
+| Problem | Mean ± σ [µs] |
+|:---|---:|
+| Problem 1 | 0.13 ± 0.12 |
+| Problem 2 | 0.17 ± 0.27 |
+| Problem 3 | 32.73 ± 2.29 |
+| Problem 4 | 13.92 ± 1.14 |
+| Problem 5 | 0.75 ± 0.18 |
+| Problem 6 | 0.13 ± 0.15 |
+| Problem 7 | 7800.45 ± 115.26 |
+| Problem 8 | 4.51 ± 0.60 |
+| Problem 9 | 64.96 ± 1.50 |
